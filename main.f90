@@ -1,12 +1,13 @@
 program main
   use m_base, only: basetype
-  use m_getit, only: getit
+  use m_cpu, only: cputype
+  use m_memblock_cpu, only: cpublock
 
   class(basetype), allocatable :: obj
-  real :: a(8)
+  type(cpublock) :: blk
 
-  a = [1, 2, 3, 4, 5, 6, 7, 8]
-  obj = getit()
+  blk = cpublock(16)
+  obj = cputype()
 
-  write(*,*) obj%doit(a)
+  write(*,*) obj%doit(blk)
 end program main
