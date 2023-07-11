@@ -1,8 +1,8 @@
 module m_gpu
   use m_base, only: basetype
+  use m_memblock, only: memblock
 
   type, extends(basetype) :: gputype
-     real, device :: a_d(:)
    contains
      procedure :: f => f_gpu
      procedure :: g => g_gpu
@@ -16,7 +16,7 @@ contains
 
     real, device :: buf
 
-    sum_kernel<<<dim3(1,1,1),dim3(16,1,1)>>>(a%data, buf)
+    sum_kernel<<<dim3(1,1,1),dim3(16,1,1)>>>(a%content, buf)
     f_gpu = buf
   end function f_gpu
 
@@ -28,4 +28,11 @@ contains
     i = threadidx%x
     err = atomic_add(buf, data(i))
   end subroutine sum_kernel
+
+  real function g_gpu(self, a)
+    class(gputype) :: self
+    class(memblock) :: a
+
+    !! TODO
+    g_gpu = 2.
 end module m_gpu
