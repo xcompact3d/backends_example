@@ -1,3 +1,6 @@
+cmake_minimum_required(VERSION 3.18)
+project(test_backends LANGUAGES Fortran)
+
 set(SRC
   memblock.f90
   base.f90
