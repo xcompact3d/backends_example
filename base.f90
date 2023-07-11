@@ -1,6 +1,6 @@
 module m_base
+  use m_memblock, only: memblock
   type, abstract :: basetype
-     integer :: n
    contains
      procedure(proc), deferred :: f, g
      procedure :: doit
@@ -9,6 +9,7 @@ module m_base
   abstract interface
      real function proc(self, a)
        import :: basetype
+       import :: memblock
        class(basetype) :: self
        class(memblock) :: a
      end function proc
