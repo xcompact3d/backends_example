@@ -16,5 +16,6 @@ module m_memblock_cpu
     type(cpublock) :: constructor
 
     allocate(constructor%content(n))
+    constructor%content = [(i, i=1,n)]
   end function constructor
 end module m_memblock_cpu
