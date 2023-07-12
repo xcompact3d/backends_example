@@ -10,8 +10,8 @@ set(SRC
 )
 
 set(CUDASRC
-  cuda/memblock_gpu.f90
-  cuda/gpu.f90
+  gpu/memblock_gpu.f90
+  gpu/gpu.f90
 )
 
 if(${CMAKE_Fortran_COMPILER_ID} STREQUAL "PGI")
