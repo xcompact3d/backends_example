@@ -2,7 +2,8 @@ module m_base
   use m_memblock, only: memblock
   type, abstract :: basetype
    contains
-     procedure(proc), deferred :: f, g
+     procedure(proc), deferred :: f
+     procedure(proc), deferred :: g
      procedure :: doit
   end type basetype
 
