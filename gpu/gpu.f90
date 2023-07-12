@@ -18,7 +18,13 @@ contains
 
     real, device :: buf
 
-    sum_kernel<<<dim3(1,1,1),dim3(16,1,1)>>>(a%content, buf)
+    select type (a)
+    type is (gpublock)
+       call sum_kernel<<<dim3(1,1,1),dim3(16,1,1)>>>(a%content, buf)
+    class default
+       error stop
+    end select
+
     f_gpu = buf
   end function f_gpu
 
