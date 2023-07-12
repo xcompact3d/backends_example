@@ -22,4 +22,5 @@ add_executable(main ${SRC})
 
 if(${CMAKE_Fortran_COMPILER_ID} STREQUAL "PGI")
   target_compile_options(main PRIVATE "-cuda")
+  target_link_options(main PRIVATE "-cuda")
 endif()
