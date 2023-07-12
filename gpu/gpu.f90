@@ -1,6 +1,8 @@
 module m_gpu
+  use cudafor
   use m_base, only: basetype
   use m_memblock, only: memblock
+  use m_memblock_gpu, only: gpublock
 
   type, extends(basetype) :: gputype
    contains
@@ -35,4 +37,5 @@ contains
 
     !! TODO
     g_gpu = 2.
+  end function g_gpu
 end module m_gpu
