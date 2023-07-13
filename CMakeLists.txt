@@ -19,7 +19,7 @@ if(${CMAKE_Fortran_COMPILER_ID} STREQUAL "PGI")
   list(APPEND SRC ${CUDASRC})
 
   add_executable(main_gpu ${SRC} main_gpu.f90)
-  add_executable(main_hybrid ${SRC} main.f90)
+  add_executable(main_hybrid ${SRC} main_hybrid.f90)
 
   target_compile_options(main_gpu PRIVATE "-cuda")
   target_link_options(main_gpu PRIVATE "-cuda")
