@@ -1,5 +1,6 @@
-Modern Fortran implementation of a template method pattern with two
-hardware backend specialisations.
+Modern Fortran implementation of a [template method
+pattern](https://en.wikipedia.org/wiki/Template_method_pattern) with
+two hardware backend specialisations (pure CPU and CPU/GPU backends).
 
 Given an array of numbers $\mathbf{a} = \[a_1, ... a_n\]$, we want to compute
 
@@ -44,6 +45,8 @@ Executing CUDA kernels
 ```
 
 ### Implementation
+
+![The class diagram](./class.png)
 
 The algorithm itself is defined once as a bound procedure `doit` to the
 abstract type `basetype` (`base.f90`).  This type is abstract because,
