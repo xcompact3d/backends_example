@@ -46,7 +46,29 @@ contains
     class(gputype) :: self
     class(memblock) :: a
 
-    !! TODO
-    g_gpu = 2.
+    real, allocatable :: b(:)
+    real, device, allocatable :: b_d(:)
+
+    select type (a)
+    type is (gpublock)
+       allocate(b_d(size(a%content)))
+       call g_kernel<<<dim3(1,1,1),dim3(16,1,1)>>>(a%content, b_d)
+    class default
+       error stop
+    end select
+
+    ! Transfer back device array to host in order to
+    ! reduce it to a scalar for the sake of this example.
+    b = b_d
+    g_gpu = maxval(b)
   end function g_gpu
+
+  attributes(global) subroutine g_kernel(in, out)
+    real, device, intent(in) :: in(:)
+    real, device, intent(out) :: out(:)
+    integer :: i
+
+    i = threadidx%x
+    out(i) = in(i) * 2
+  end subroutine g_kernel
 end module m_gpu
