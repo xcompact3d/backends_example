@@ -1,4 +1,4 @@
-program main
+program main_hybrid
   use m_base, only: basetype
   use m_cpu, only: cputype
   use m_memblock_cpu, only: cpublock
@@ -16,4 +16,23 @@ program main
   ! the dynamic type of obj.
 
   write(*,*) obj%doit(blk)
-end program main
+
+contains
+
+  character(3) function get_target_from_cli() result(tgt)
+    integer :: length, status
+    character(100) :: arg
+
+    call get_command_argument(1, arg, length, status)
+    if (status > 0) then
+       tgt = 'cpu'
+       return
+    end if
+    if (arg /= '--gpu') then
+       write(*,*) "ERROR: Unknown option", arg
+       error stop
+    end if
+    tgt = 'gpu'
+  end function get_target_from_cli
+
+end program main_hybrid
