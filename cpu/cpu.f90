@@ -17,7 +17,7 @@ contains
 
     select type (a)
     type is (cpublock)
-       f_cpu = sum(a%content)
+       f_cpu = sum(a%content + 1)
     class default
        error stop
     end select
@@ -29,7 +29,7 @@ contains
 
     select type (a)
     type is (cpublock)
-       g_cpu = maxval(a%content)
+       g_cpu = maxval(a%content * 2)
     class default
        error stop
     end select
