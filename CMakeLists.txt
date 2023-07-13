@@ -6,7 +6,6 @@ set(SRC
   base.f90
   cpu/memblock_cpu.f90
   cpu/cpu.f90
-  main.f90
 )
 
 set(CUDASRC
@@ -14,13 +13,17 @@ set(CUDASRC
   gpu/gpu.f90
 )
 
+add_executable(main_cpu ${SRC} main_cpu.f90)
+
 if(${CMAKE_Fortran_COMPILER_ID} STREQUAL "PGI")
   list(APPEND SRC ${CUDASRC})
-endif()
 
-add_executable(main ${SRC})
+  add_executable(main_gpu ${SRC} main_gpu.f90)
+  add_executable(main_hybrid ${SRC} main.f90)
 
-if(${CMAKE_Fortran_COMPILER_ID} STREQUAL "PGI")
-  target_compile_options(main PRIVATE "-cuda")
-  target_link_options(main PRIVATE "-cuda")
+  target_compile_options(main_gpu PRIVATE "-cuda")
+  target_link_options(main_gpu PRIVATE "-cuda")
+
+  target_compile_options(main_hybrid PRIVATE "-cuda")
+  target_link_options(main_hybrid PRIVATE "-cuda")
 endif()
