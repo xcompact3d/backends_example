@@ -16,12 +16,20 @@ module m_base
      end function proc
   end interface
 
-  contains
+contains
 
   real function doit(self, blk)
+    !! Template method
     class(basetype) :: self
     class(memblock) :: blk
 
-    doit = self%f(blk) + self%g(blk)
+    real :: a, b
+
+    ! Both f and g are defined in types
+    ! extending basetype.
+    a = self%f(blk)
+    b = self%g(blk)
+
+    doit = a + b
   end function doit
 end module m_base
