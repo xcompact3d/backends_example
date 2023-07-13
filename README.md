@@ -28,7 +28,7 @@ The above builds three executables:
 
 1. `main_cpu`: CPU-only version.
 2. `main_gpu`: Version with `f` and `g` implemented as accelerated GPU
-kernels.  
+kernels.
 3. `main_hybrid`: Execution of GPU kernels is enabled/disabled at runtime.
 
 From the build directory:
@@ -57,3 +57,29 @@ and `gputype` (`gpu/gpu.f90`).  The former implements `f` and `g`
 using standard Fortran to be executed on a CPU. The latter, `gputype`,
 provides an implementation of `f` and `g` based on CUDA Fortran, using
 kernel procedures to be executed on NVIDIA GPUs.
+
+The input array $\mathbf{a}$ is abstracted into a `memblock`
+(`memblock.f90`) type (`mem`ory `block`).  The `cpublock`
+(`cpu/cpublock.f90`) type holds an allocatable real array, whilst the
+`gpublock` (`gpu/gpublock`) holds an allocatable real device array.
+
+The current (main_hybrid.f90) implementation uses a pointer to the
+right type depending on the execution target:
+
+```f90
+  case('gpu')
+     gpublk = gpublock(16); blk => gpublk
+```
+
+An preferable approach would be to rely on automatic (re)allocation of
+polymorphic entities
+
+```f90
+class(memblock), allocatable :: blk
+
+case('gpu')
+   blk = gpublock(16) ! Automatic allocation of the dynamic type
+```
+
+Unfortunately this is not supported by the NVIDIA Fortran compiler
+(`nvfortran 22.5`).
