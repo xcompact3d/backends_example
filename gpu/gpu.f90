@@ -16,26 +16,31 @@ contains
     class(gputype) :: self
     class(memblock) :: a
 
-    real, device :: buf
+    real, allocatable :: b(:)
+    real, device, allocatable :: b_d(:)
 
     select type (a)
     type is (gpublock)
-       call sum_kernel<<<dim3(1,1,1),dim3(16,1,1)>>>(a%content, buf)
+       allocate(b_d(size(a%content)))
+       call f_kernel<<<dim3(1,1,1),dim3(16,1,1)>>>(a%content, b_d)
     class default
        error stop
     end select
 
-    f_gpu = buf
+    ! Transfer back device array to host in order to
+    ! reduce it to a scalar for the sake of this example.
+    b = b_d
+    f_gpu = sum(b)
   end function f_gpu
 
-  attributes(global) subroutine sum_kernel(data, buf)
-    real, device :: data(:)
-    real, device :: buf
-    integer :: i, err
+  attributes(global) subroutine f_kernel(in, out)
+    real, device, intent(in) :: in(:)
+    real, device, intent(out) :: out(:)
+    integer :: i
 
     i = threadidx%x
-    err = atomic_add(buf, data(i))
-  end subroutine sum_kernel
+    out(i) = in(i) + 1
+  end subroutine f_kernel
 
   real function g_gpu(self, a)
     class(gputype) :: self
