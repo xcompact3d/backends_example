@@ -37,7 +37,7 @@ From the build directory:
 ```
 $ make main_hybrid # Build once, run everywhere.
 ./main_hybrid
-$ Executing on CPU only
+Executing on CPU only
     184.000
 $ ./main_hybrid --gpu
 Executing CUDA kernels
